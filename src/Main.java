@@ -128,14 +128,23 @@ public class Main {
         	}
         }
         // Vérification :	
-        System.out.println("TAILLE:"+listSens.size());
+       /* System.out.println("TAILLE:"+listSens.size());
 		for(i = 0 ; i < listSens.size() ;i++){
 			System.out.println("------------"+listSens.get(i).size());
 			
 			for(j=0; j<listSens.get(i).size(); j++)
 				System.out.println(listSens.get(i).get(j));
+		}*/
+		int a;
+		//calcul de le similiraté entre chaque sens pour chaque combinaison
+		for(i=0; i < listSens.size();i++){
+			for(j=0; j < listSens.get(i).size(); j++){
+				for(k=j+1; k < listSens.get(i).size(); k++){
+					a= dict.getSimilarity(listSens.get(i).get(j),listSens.get(i).get(k));
+					System.out.println(a+"---");
+				}
+			}
 		}
-		
 		
 		return liste;
 	}
