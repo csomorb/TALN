@@ -116,18 +116,16 @@ public class Main {
         		for(j=0; j < listeSenseMot.size(); j++){
         			for(k = 0; k < listSens.size(); k++){
         				listeTMP = new ArrayList<Sense>();
-        				//System.out.println(listeTMP.size());
-        				ArrayList<Sense> clone = (ArrayList<Sense>) listSens.get(i).clone();
+        				@SuppressWarnings("unchecked")
+						ArrayList<Sense> clone = (ArrayList<Sense>) listSens.get(k).clone();
 						listeTMP = clone;
         				Sense sen = (Sense)listeSenseMot.get(j).clone();
             			listeTMP.add(sen);
-            			System.out.println(listeTMP.size());
             			listSensTMP.add(listeTMP);
         			}
         		}
         		listSens = 	listSensTMP;
         	}
-        		
         }
         // Vérification :	
         System.out.println("TAILLE:"+listSens.size());
@@ -137,6 +135,8 @@ public class Main {
 			for(j=0; j<listSens.get(i).size(); j++)
 				System.out.println(listSens.get(i).get(j));
 		}
+		
+		
 		return liste;
 	}
     
