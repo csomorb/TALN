@@ -18,12 +18,12 @@ public class Main {
 	public static void main(String[] args) throws FileNotFoundException{
 		Dictionary d1 = new Dictionary();
 		d1.loadDictionary("src/Dict-Lesk.xml");
-	/*	Dictionary d2 = new Dictionary();
+		Dictionary d2 = new Dictionary();
 		d2.loadDictionary("src/Dict-Lesk-etendu.xml");
 		Dictionary d3 = new Dictionary();
 		d3.loadDictionary("src/dict_all_stopwords_stemming_semcor_dso_wordnetglosstag_150");
 		System.out.println("Taille de Disk-Lesk: "+d1.size()+"\nTaille de Disk-lesk-etendu: "+d2.size()+"\nTaille du troisième: "+d3.size());
-	*/	
+		
 		ArrayList<Sense> listeSensCone = d1.getSenses("cone");
 		System.out.println("Nombre de sens du mot cone: "+listeSensCone.size());
 		for (int i = 0; i < listeSensCone.size(); i++)
@@ -46,7 +46,7 @@ public class Main {
         System.out.println("nombre de sens: "+nbCombinaisons("dog eat bone every day",d1));
         System.out.println("nombre de sens: "+nbCombinaisons("doctor be hospital last day night",d1));
         System.out.println("nombre de sens: "+nbCombinaisons("pictures paint be flat round figure be very often foot do look be stand ground all point downward be hanging air",d1));
-		exo14();
+		exo14(d1,d2,d3);
 		/* Argument de ligne de commande:
 		 * Main.class [dictionnaire] [corpus]
 		 * Par exemple: java org.wic.wsd.Main dictionnaire.xml eng-coarse-all-words.xml sortie.ans*/
@@ -102,8 +102,8 @@ public class Main {
         	return 0;
     }
 	
-	//eo 14
-	public static void exo14(){
+	//exo 14
+	public static void exo14(Dictionary d1,Dictionary d2,Dictionary d3){
 		//lecture du csv + initialisation de la structure
 		ArrayList<String[]> liste = new ArrayList<String[]>();
 		//Input file which needs to be parsed
@@ -142,7 +142,13 @@ public class Main {
         // fin de l'initialisation de la structure liste, qui contient le fichier csv
    
 		//pour chaque paire de mots calcul de la similarité avec les 3 dicos
-		
+        System.out.println("Mot 1, mot 2, simil humain, simil dico 1, simil dico 2, simil dico 3");
+		for (int i= 0; i< liste.size(); i++){
+			float d1sim = d1.getSimilarity(liste.get(i)[0],liste.get(i)[1]);
+			float d2sim = d2.getSimilarity(liste.get(i)[0],liste.get(i)[1]);
+			float d3sim = d3.getSimilarity(liste.get(i)[0],liste.get(i)[1]);
+			System.out.println(liste.get(i)[0]+" "+liste.get(i)[1]+" "+liste.get(i)[2]+" "+d1sim+" "+d2sim+" "+d3sim);
+		}
    
 	}
 	
