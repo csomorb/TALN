@@ -110,12 +110,18 @@ public class Main {
         			listSens.add(listeTMP);
         		}		
         	}
+        	
         	else{ 		
         		listSensTMP = new ArrayList<ArrayList<Sense>>();
         		for(j=0; j < listeSenseMot.size(); j++){
         			for(k = 0; k < listSens.size(); k++){
-        				listeTMP = listSens.get(k);
-            			listeTMP.add(listeSenseMot.get(j));
+        				listeTMP = new ArrayList<Sense>();
+        				//System.out.println(listeTMP.size());
+        				ArrayList<Sense> clone = (ArrayList<Sense>) listSens.get(i).clone();
+						listeTMP = clone;
+        				Sense sen = (Sense)listeSenseMot.get(j).clone();
+            			listeTMP.add(sen);
+            			System.out.println(listeTMP.size());
             			listSensTMP.add(listeTMP);
         			}
         		}
@@ -123,10 +129,14 @@ public class Main {
         	}
         		
         }
-        	
+        // Vérification :	
         System.out.println("TAILLE:"+listSens.size());
-		
-		
+		for(i = 0 ; i < listSens.size() ;i++){
+			System.out.println("------------"+listSens.get(i).size());
+			
+			for(j=0; j<listSens.get(i).size(); j++)
+				System.out.println(listSens.get(i).get(j));
+		}
 		return liste;
 	}
     
