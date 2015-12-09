@@ -92,16 +92,39 @@ public class Main {
 	
 	public static ArrayList<String>algoExhaustif(String s, Dictionary dict){
 		ArrayList<String> liste = new ArrayList<String>();
-		ArrayList<Sense> listeSens = new ArrayList<Sense>();
-		String[] tableauCombinaison = s.split(" ");
-        for (int i=0; i < tableauCombinaison.length ; i++){
-        	listeSens = dict.getSenses(tableauCombinaison[i]);
-        	for(int j=0; j < listeSens.size(); j++){
-        		System.out.println(listeSens.get(j).toString());
-        		
+		int i,j,k;
+		//generation de toutes les combinaisons de sens
+		ArrayList<Sense> listeSenseMot = new ArrayList<Sense>();
+		ArrayList<Sense> listeTMP = new ArrayList<Sense>();
+		// tableau 2d contenant toutes les combinaisons de sens
+		ArrayList<ArrayList<Sense>>listSens = new ArrayList<ArrayList<Sense>>();
+		ArrayList<ArrayList<Sense>>listSensTMP = new ArrayList<ArrayList<Sense>>();
+		String[] tableauMots = s.split(" ");
+        for (i=0; i < tableauMots.length ; i++){
+        	listeSenseMot = dict.getSenses(tableauMots[i]);
+        	// premier passage
+        	if (listSens.isEmpty()){
+        		for(j=0; j < listeSenseMot.size(); j++){	
+        			listeTMP = new ArrayList<Sense>();
+        			listeTMP.add(listeSenseMot.get(j));
+        			listSens.add(listeTMP);
+        		}		
         	}
-        	
+        	else{ 		
+        		listSensTMP = new ArrayList<ArrayList<Sense>>();
+        		for(j=0; j < listeSenseMot.size(); j++){
+        			for(k = 0; k < listSens.size(); k++){
+        				listeTMP = listSens.get(k);
+            			listeTMP.add(listeSenseMot.get(j));
+            			listSensTMP.add(listeTMP);
+        			}
+        		}
+        		listSens = 	listSensTMP;
+        	}
+        		
         }
+        	
+        System.out.println("TAILLE:"+listSens.size());
 		
 		
 		return liste;
