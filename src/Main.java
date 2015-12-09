@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import corpus.Corpus;
 import corpus.Text;
@@ -135,17 +136,24 @@ public class Main {
 			for(j=0; j<listSens.get(i).size(); j++)
 				System.out.println(listSens.get(i).get(j));
 		}*/
-		int a;
+		int similarite;
+		ArrayList<Integer> scoreListe = new ArrayList<Integer>();
 		//calcul de le similiraté entre chaque sens pour chaque combinaison
 		for(i=0; i < listSens.size();i++){
+			similarite = 0;
 			for(j=0; j < listSens.get(i).size(); j++){
 				for(k=j+1; k < listSens.get(i).size(); k++){
-					a= dict.getSimilarity(listSens.get(i).get(j),listSens.get(i).get(k));
-					System.out.println(a+"---");
+					similarite+= dict.getSimilarity(listSens.get(i).get(j),listSens.get(i).get(k));
 				}
 			}
+			scoreListe.add(similarite);
 		}
-		
+		int maxScore = Collections.max(scoreListe);
+		int indexMaxScore = scoreListe.indexOf(maxScore);
+		System.out.println("Le score max est: "+maxScore+" a l'indice: "+indexMaxScore+" Pour la phrase: "+s);
+		System.out.println("La liste des sens ayant obtenu le meilleur score:\n--------------- ");
+		for(i=0;i<listSens.get(indexMaxScore).size() ; i++)
+			System.out.println(listSens.get(indexMaxScore).get(i));
 		return liste;
 	}
     
