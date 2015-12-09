@@ -38,7 +38,11 @@ public class Main {
 		double[] vect2 = {4,2,1,6,6,10,4};
 		System.out.println("La corélation est de: "+s.getPearsonCorrelation(vect1,vect2));
 		
-		
+		System.out.println("nombre de sens: "+nbCombinaisons("go",d1));
+        System.out.println("nombre de sens: "+nbCombinaisons("mouse pilot computer",d1));
+        System.out.println("nombre de sens: "+nbCombinaisons("dog eat bone every day",d1));
+        System.out.println("nombre de sens: "+nbCombinaisons("doctor be hospital last day night",d1));
+        System.out.println("nombre de sens: "+nbCombinaisons("pictures paint be flat round figure be very often foot do look be stand ground all point downward be hanging air",d1));
 		
 		/* Argument de ligne de commande:
 		 * Main.class [dictionnaire] [corpus]
@@ -79,5 +83,16 @@ public class Main {
         }*/
 	}
     
+	public static long nbCombinaisons(String s, Dictionary dict){
+        long nbCombinaison = 1;
+        String[] tableauCombinaison = s.split(" ");
+        for (int i=0; i < tableauCombinaison.length ; i++){
+        	if (dict.getSenses(tableauCombinaison[i]).size()> 0)
+        		nbCombinaison*=dict.getSenses(tableauCombinaison[i]).size();
+        }
+        return nbCombinaison;
+    }
+	
+	
     
 }
