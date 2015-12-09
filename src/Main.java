@@ -49,7 +49,7 @@ public class Main {
         System.out.println("nombre de sens: "+nbCombinaisons("pictures paint be flat round figure be very often foot do look be stand ground all point downward be hanging air",d1));
 	//	exo14(d1,d2,d3);
         
-        ArrayList<String> l = algoExhaustif("mouse pilot computer",d1);
+        ArrayList<Sense> l = algoExhaustif("doctor be hospital last day night",d1);
        
 		/* Argument de ligne de commande:
 		 * Main.class [dictionnaire] [corpus]
@@ -91,8 +91,8 @@ public class Main {
 	}
 	
 	
-	public static ArrayList<String>algoExhaustif(String s, Dictionary dict){
-		ArrayList<String> liste = new ArrayList<String>();
+	public static ArrayList<Sense>algoExhaustif(String s, Dictionary dict){
+		ArrayList<Sense> liste = new ArrayList<Sense>();
 		int i,j,k;
 		//generation de toutes les combinaisons de sens
 		ArrayList<Sense> listeSenseMot = new ArrayList<Sense>();
@@ -148,13 +148,17 @@ public class Main {
 			}
 			scoreListe.add(similarite);
 		}
+		if (scoreListe.size() == 0){
+			System.out.println("Mot non présent dans le dico!!!");
+			return liste;
+		}
 		int maxScore = Collections.max(scoreListe);
 		int indexMaxScore = scoreListe.indexOf(maxScore);
 		System.out.println("Le score max est: "+maxScore+" a l'indice: "+indexMaxScore+" Pour la phrase: "+s);
 		System.out.println("La liste des sens ayant obtenu le meilleur score:\n--------------- ");
 		for(i=0;i<listSens.get(indexMaxScore).size() ; i++)
 			System.out.println(listSens.get(indexMaxScore).get(i));
-		return liste;
+		return listSens.get(indexMaxScore);
 	}
     
 	public static long nbCombinaisons(String s, Dictionary dict){
