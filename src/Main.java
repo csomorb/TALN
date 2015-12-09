@@ -18,7 +18,7 @@ public class Main {
 	public static void main(String[] args) throws FileNotFoundException{
 		Dictionary d1 = new Dictionary();
 		d1.loadDictionary("src/Dict-Lesk.xml");
-		Dictionary d2 = new Dictionary();
+	/*	Dictionary d2 = new Dictionary();
 		d2.loadDictionary("src/Dict-Lesk-etendu.xml");
 		Dictionary d3 = new Dictionary();
 		d3.loadDictionary("src/dict_all_stopwords_stemming_semcor_dso_wordnetglosstag_150");
@@ -33,8 +33,8 @@ public class Main {
 		System.out.println("Nombre de sens du mot pine: "+listeSensPine.size());
 		for (int i = 0; i < listeSensPine.size(); i++)
 			System.out.println(listeSensPine.get(i));
-		System.out.println("Similiraté Lesk avec le dico Disk-Lesk: "+ d1.getSimilarity("cone", "pine"));
-	/*	System.out.println("Similiraté Lesk avec le dico Disk-Lesk-etendu: "+ d2.getSimilarity("cone", "pine"));
+		System.out.println("Similiraté Lesk avec le dico Disk-Lesk: "+ d1.getSimilarity("cone", "pine")); 
+	*//*	System.out.println("Similiraté Lesk avec le dico Disk-Lesk-etendu: "+ d2.getSimilarity("cone", "pine"));
 		System.out.println("Similiraté Lesk avec le dico 3: "+ d3.getSimilarity("cone", "pine"));
 	*/	
 		double[] vect1 = {1.,4.,8.,12.,2.,5.,4.};
@@ -46,7 +46,10 @@ public class Main {
         System.out.println("nombre de sens: "+nbCombinaisons("dog eat bone every day",d1));
         System.out.println("nombre de sens: "+nbCombinaisons("doctor be hospital last day night",d1));
         System.out.println("nombre de sens: "+nbCombinaisons("pictures paint be flat round figure be very often foot do look be stand ground all point downward be hanging air",d1));
-		exo14(d1,d2,d3);
+	//	exo14(d1,d2,d3);
+        
+        ArrayList<String> l = algoExhaustif("mouse pilot computer",d1);
+       
 		/* Argument de ligne de commande:
 		 * Main.class [dictionnaire] [corpus]
 		 * Par exemple: java org.wic.wsd.Main dictionnaire.xml eng-coarse-all-words.xml sortie.ans*/
@@ -84,6 +87,24 @@ public class Main {
             configuration.writeResult(t, answerWriter);
         
         }*/
+	}
+	
+	
+	public static ArrayList<String>algoExhaustif(String s, Dictionary dict){
+		ArrayList<String> liste = new ArrayList<String>();
+		ArrayList<Sense> listeSens = new ArrayList<Sense>();
+		String[] tableauCombinaison = s.split(" ");
+        for (int i=0; i < tableauCombinaison.length ; i++){
+        	listeSens = dict.getSenses(tableauCombinaison[i]);
+        	for(int j=0; j < listeSens.size(); j++){
+        		System.out.println(listeSens.get(j).toString());
+        		
+        	}
+        	
+        }
+		
+		
+		return liste;
 	}
     
 	public static long nbCombinaisons(String s, Dictionary dict){
