@@ -7,23 +7,25 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 import corpus.Corpus;
 import corpus.Text;
 import dictionary.Dictionary;
 import dictionary.Sense;
+import dictionary.Word;
 
 
 public class Main {
 	
 	public static void main(String[] args) throws FileNotFoundException{
-		Dictionary d1 = new Dictionary();
+	/*	Dictionary d1 = new Dictionary();
 		d1.loadDictionary("src/Dict-Lesk.xml");
-	/*	Dictionary d2 = new Dictionary();
+		Dictionary d2 = new Dictionary();
 		d2.loadDictionary("src/Dict-Lesk-etendu.xml");
 		Dictionary d3 = new Dictionary();
 		d3.loadDictionary("src/dict_all_stopwords_stemming_semcor_dso_wordnetglosstag_150");
-		System.out.println("Taille de Disk-Lesk: "+d1.size()+"\nTaille de Disk-lesk-etendu: "+d2.size()+"\nTaille du troisième: "+d3.size());
+		System.out.println("Taille de Disk-Lesk: "+d1.size()+"\nTaille de Disk-lesk-etendu: "+d2.size()+"\nTaille du troisiï¿½me: "+d3.size());
 		
 		ArrayList<Sense> listeSensCone = d1.getSenses("cone");
 		System.out.println("Nombre de sens du mot cone: "+listeSensCone.size());
@@ -34,60 +36,60 @@ public class Main {
 		System.out.println("Nombre de sens du mot pine: "+listeSensPine.size());
 		for (int i = 0; i < listeSensPine.size(); i++)
 			System.out.println(listeSensPine.get(i));
-		System.out.println("Similiraté Lesk avec le dico Disk-Lesk: "+ d1.getSimilarity("cone", "pine")); 
-	*//*	System.out.println("Similiraté Lesk avec le dico Disk-Lesk-etendu: "+ d2.getSimilarity("cone", "pine"));
-		System.out.println("Similiraté Lesk avec le dico 3: "+ d3.getSimilarity("cone", "pine"));
-	*/	
+		System.out.println("Similiratï¿½ Lesk avec le dico Disk-Lesk: "+ d1.getSimilarity("cone", "pine")); 
+		System.out.println("Similiratï¿½ Lesk avec le dico Disk-Lesk-etendu: "+ d2.getSimilarity("cone", "pine"));
+		System.out.println("Similiratï¿½ Lesk avec le dico 3: "+ d3.getSimilarity("cone", "pine"));
+		
 		double[] vect1 = {1.,4.,8.,12.,2.,5.,4.};
 		double[] vect2 = {4,2,1,6,6,10,4};
-		System.out.println("La corélation est de: "+Stats.getPearsonCorrelation(vect1,vect2));
+		System.out.println("La corï¿½lation est de: "+Stats.getPearsonCorrelation(vect1,vect2));
 		
 		System.out.println("nombre de sens: "+nbCombinaisons("go",d1));
         System.out.println("nombre de sens: "+nbCombinaisons("mouse pilot computer",d1));
         System.out.println("nombre de sens: "+nbCombinaisons("dog eat bone every day",d1));
         System.out.println("nombre de sens: "+nbCombinaisons("doctor be hospital last day night",d1));
         System.out.println("nombre de sens: "+nbCombinaisons("pictures paint be flat round figure be very often foot do look be stand ground all point downward be hanging air",d1));
-	//	exo14(d1,d2,d3);
+			exo14(d1,d2,d3);
         
-        ArrayList<Sense> l = algoExhaustif("doctor be hospital last day night",d1);
-       
+      	ArrayList<Sense> l = algoExhaustif("doctor be hospital last day night",d1);
+      */ 
 		/* Argument de ligne de commande:
 		 * Main.class [dictionnaire] [corpus]
 		 * Par exemple: java org.wic.wsd.Main dictionnaire.xml eng-coarse-all-words.xml sortie.ans*/
 		
 		/*Exemple d'utilisation*/
-	/*	Dictionary d = new Dictionary();
-		d.loadDictionary("Dict-Lesk.xml");
+		Dictionary d = new Dictionary();
+		d.loadDictionary("src/Dict-Lesk.xml");
 		
 		Corpus c = new Corpus();
-		c.loadCorpus(d, args[1]);
-		
-        PrintStream answerWriter = new PrintStream(args[2]);
-        
-		for(Text t : c.getTexts()){// On réalise les mêmes opérations sur chaque texte du corpus
+		c.loadCorpus(d,"eng-coarse-all-words.xml");
+		stochastique1(c,50,d);
+ //       PrintStream answerWriter = new PrintStream(args[2]);
+   /*     
+		for(Text t : c.getTexts()){// On rï¿½alise les mï¿½mes opï¿½rations sur chaque texte du corpus
 			System.out.println("Texte "+t.getLabel());
-	*/		/*Configuration initiale: Selection de sens aléatoires*/
+			/*Configuration initiale: Selection de sens alï¿½atoires*/
 		//	ProblemConfiguration configuration = new ProblemConfiguration(t.getLength(), true, t);
 			
 			/*Faire quelque chose avec configuration*/
 			
 			/*Par exemple, pour calculer son score*/
-		/*	configuration.computeScore(t, d);
-			double score = configuration.getScore();
-			System.out.println("\tScore initial=         "+score);
-		*/	
-			/*Faire un changement aléatoire, 
-			 * on peut étendre/modifier la classe pour avoir un comportement
-			 * plus spécifique*/
+		//	configuration.computeScore(t, d);
+		//	double score = configuration.getScore();
+		//	System.out.println("\tScore initial=         "+score);
+			
+			/*Faire un changement alï¿½atoire, 
+			 * on peut ï¿½tendre/modifier la classe pour avoir un comportement
+			 * plus spï¿½cifique*/
 		//	configuration.makeChange(t);
 			
 			/*Score post changement*/
-		/*	configuration.computeScore(t, d);
-			score = configuration.getScore();
-			System.out.println("\tScore après changement="+score);
-            configuration.writeResult(t, answerWriter);
+		//	configuration.computeScore(t, d);
+		//	score = configuration.getScore();
+		//	System.out.println("\tScore aprï¿½s changement="+score);
+       //     configuration.writeResult(t, answerWriter);
         
-        }*/
+       // }
 	}
 	
 	
@@ -128,7 +130,7 @@ public class Main {
         		listSens = 	listSensTMP;
         	}
         }
-        // Vérification :	
+        // Vï¿½rification :	
        /* System.out.println("TAILLE:"+listSens.size());
 		for(i = 0 ; i < listSens.size() ;i++){
 			System.out.println("------------"+listSens.get(i).size());
@@ -138,7 +140,7 @@ public class Main {
 		}*/
 		int similarite;
 		ArrayList<Integer> scoreListe = new ArrayList<Integer>();
-		//calcul de le similiraté entre chaque sens pour chaque combinaison
+		//calcul de le similiratï¿½ entre chaque sens pour chaque combinaison
 		for(i=0; i < listSens.size();i++){
 			similarite = 0;
 			for(j=0; j < listSens.get(i).size(); j++){
@@ -149,7 +151,7 @@ public class Main {
 			scoreListe.add(similarite);
 		}
 		if (scoreListe.size() == 0){
-			System.out.println("Mot non présent dans le dico!!!");
+			System.out.println("Mot non prï¿½sent dans le dico!!!");
 			return liste;
 		}
 		int maxScore = Collections.max(scoreListe);
@@ -216,7 +218,7 @@ public class Main {
         liste.remove(0);
         // fin de l'initialisation de la structure liste, qui contient le fichier csv
    
-		//pour chaque paire de mots calcul de la similarité avec les 3 dicos
+		//pour chaque paire de mots calcul de la similaritï¿½ avec les 3 dicos
         System.out.println("Mot 1, mot 2, simil humain, simil dico 1, simil dico 2, simil dico 3");
 		for (int i= 0; i< liste.size(); i++){
 			float d1sim = d1.getSimilarity(liste.get(i)[0],liste.get(i)[1]);
@@ -228,4 +230,50 @@ public class Main {
 	}
 	
     
+	public  static void stochastique1(Corpus c, int n, Dictionary d){
+        /*Configuration initiale: Selection de sens alÃ©atoires*/
+        ArrayList<Text> listeTexte = c.getTexts();
+        ArrayList<ProblemConfiguration> listConfiguration = new ArrayList<ProblemConfiguration>();
+        Word mot;
+        double[] listeScore = new double[listeTexte.size()];
+        Random rand = new Random();
+        int indiceMotHasard; // l'indice du mot qu'on tire au hasard dans le text
+        int indiceSensHasard; // l'indice du sens qu'on tire au hasard 
+        //+ arrayliste de configuration
+        for (int j= 0; j < listeTexte.size(); j++){
+            listeScore[j] = 0.0;
+            ProblemConfiguration configuration = new ProblemConfiguration(listeTexte.get(j).getLength(), true, listeTexte.get(j));
+            for (int i=1 ; i <= n;i++){
+                // tirer un mot au hasard entre 0 et longeur texte
+            	indiceMotHasard =  rand.nextInt(listeTexte.get(j).getLength());
+            	mot=listeTexte.get(j).getWord(indiceMotHasard);
+                // tirer un sense au hasard entre 0 et nombre de sens du mot a partir d'un dico
+            	do{
+            		indiceSensHasard = rand.nextInt(mot.sensesSize());
+            	} while(configuration.getSelectedSenseAt(indiceMotHasard) == indiceSensHasard && mot.sensesSize()!=1);
+            	//System.out.println("INDICE"+indiceSensHasard);
+            	 configuration.setSelectedSenseAt(indiceMotHasard, indiceSensHasard);
+                // repeter l'etape precedente tant que le sens n'est pas different ou qu'il n'y a qu'un sens au mot
+                // setsense indeice du mot du nouyveau sens
+                // recalculer le sore de la configuaratiopn
+            	 configuration.computeScore(listeTexte.get(j), d);	
+                // si le score est > listeScore[j] alors listeScore[j] = score qu'on vient de calculer
+            	 if (listeScore[j]< configuration.getScore()){
+            		 listeScore[j] = configuration.getScore();
+            		 if (listConfiguration.size() == j && j!=0)
+            			 listConfiguration.remove(j-1);
+            		 listConfiguration.add(configuration);
+            	 }
+            	 System.out.println(configuration.getScore());
+            }
+            System.out.println("----");
+            System.out.println("score retenu: "+ listeScore[j] );
+            System.out.println("----");
+        }
+        //retourne une combinaison <texte,configuration> ou configuartion est le meilleur resultat obtenu
+        // return <listText,listConfiguration>; enfin un truc dans ce genre...
+	}
+
+	
+	
 }
