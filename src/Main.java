@@ -58,12 +58,20 @@ public class Main {
 		 * Par exemple: java org.wic.wsd.Main dictionnaire.xml eng-coarse-all-words.xml sortie.ans*/
 		
 		/*Exemple d'utilisation*/
-		Dictionary d = new Dictionary();
-		d.loadDictionary("src/Dict-Lesk.xml");
-		
-		Corpus c = new Corpus();
-		c.loadCorpus(d,"eng-coarse-all-words.xml");
-		stochastique1(c,50,d);
+		Dictionary d1 = new Dictionary();
+		d1.loadDictionary("src/Dict-Lesk.xml");
+		Dictionary d2 = new Dictionary();
+		d2.loadDictionary("src/Dict-Lesk-etendu.xml");
+		Corpus c1 = new Corpus();
+		c1.loadCorpus(d1,"eng-coarse-all-words.xml");
+		Corpus c2 = new Corpus();
+		c2.loadCorpus(d2,"eng-coarse-all-words.xml");
+		System.out.println("Execution 1: ");
+		stochastique1(c1,100,d1);
+		System.out.println("Execution 2:");
+		stochastique1(c1,100,d1);
+		System.out.println("Execution 3:");
+		stochastique1(c1,100,d1);
  //       PrintStream answerWriter = new PrintStream(args[2]);
    /*     
 		for(Text t : c.getTexts()){// On rï¿½alise les mï¿½mes opï¿½rations sur chaque texte du corpus
@@ -240,6 +248,7 @@ public class Main {
         int indiceMotHasard; // l'indice du mot qu'on tire au hasard dans le text
         int indiceSensHasard; // l'indice du sens qu'on tire au hasard 
         //+ arrayliste de configuration
+        System.out.println("Score pour "+n+" itérations");
         for (int j= 0; j < listeTexte.size(); j++){
             listeScore[j] = 0.0;
             ProblemConfiguration configuration = new ProblemConfiguration(listeTexte.get(j).getLength(), true, listeTexte.get(j));
@@ -264,15 +273,45 @@ public class Main {
             			 listConfiguration.remove(j-1);
             		 listConfiguration.add(configuration);
             	 }
-            	 System.out.println(configuration.getScore());
+            	// System.out.println(configuration.getScore());
             }
-            System.out.println("----");
-            System.out.println("score retenu: "+ listeScore[j] );
-            System.out.println("----");
+        //    System.out.println("----");
+            System.out.println("score retenu pour le texte "+(j+1)+": "+ listeScore[j] );
+         //   System.out.println("----");
         }
         //retourne une combinaison <texte,configuration> ou configuartion est le meilleur resultat obtenu
         // return <listText,listConfiguration>; enfin un truc dans ce genre...
 	}
+	
+	public  static void stochastique_estim_distr(Corpus c, int n, int m, int s, Dictionary d){
+        /*Configuration initiale: Selection de sens alÃ©atoires*/
+        ArrayList<Text> listeTexte = c.getTexts();
+       // ArrayList<ProblemConfiguration> listConfiguration = new ArrayList<ProblemConfiguration>();
+       // Word mot;
+        //double[] listeScore = new double[listeTexte.size()];
+        Random rand = new Random();
+   
+        //+ arrayliste de configuration
+        // Pour chaque test du corpus
+        for (int j= 0; j < listeTexte.size(); j++){
+            
+           // ProblemConfiguration configuration = new ProblemConfiguration(listeTexte.get(j).getLength(), true, listeTexte.get(j));
+            /*
+             * Création de n configurations hasard
+             * les classer par score
+             * tant que s > 0
+             *    s--
+             *    prendre le m meilleurs configuration
+             * 	  pour tous les / ou les m mots? 	  
+             * 		
+             * 	
+             * */
+            
+            
+            
+        }
+	}
+
 
 	
 	
