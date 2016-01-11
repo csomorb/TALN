@@ -60,18 +60,19 @@ public class Main {
 		/*Exemple d'utilisation*/
 		Dictionary d1 = new Dictionary();
 		d1.loadDictionary("src/Dict-Lesk.xml");
-		Dictionary d2 = new Dictionary();
-		d2.loadDictionary("src/Dict-Lesk-etendu.xml");
+	/*	Dictionary d2 = new Dictionary();
+		d2.loadDictionary("src/Dict-Lesk-etendu.xml");*/
 		Corpus c1 = new Corpus();
 		c1.loadCorpus(d1,"eng-coarse-all-words.xml");
-		Corpus c2 = new Corpus();
-		c2.loadCorpus(d2,"eng-coarse-all-words.xml");
+		//Corpus c2 = new Corpus();
+		//c2.loadCorpus(d2,"eng-coarse-all-words.xml");
 		System.out.println("Execution 1: ");
-		stochastique1(c1,100,d1);
+		stochastique_estim_distr(c1,100,90,5,d1,1);
+	/*	stochastique1(c1,100,d1);
 		System.out.println("Execution 2:");
 		stochastique1(c1,100,d1);
 		System.out.println("Execution 3:");
-		stochastique1(c1,100,d1);
+		stochastique1(c1,100,d1);*/
  //       PrintStream answerWriter = new PrintStream(args[2]);
    /*     
 		for(Text t : c.getTexts()){// On rï¿½alise les mï¿½mes opï¿½rations sur chaque texte du corpus
@@ -283,17 +284,17 @@ public class Main {
         // return <listText,listConfiguration>; enfin un truc dans ce genre...
 	}
 	
-	public  static void stochastique_estim_distr(Corpus c, int n, int m, int s, Dictionary d){
+	public  static void stochastique_estim_dtr(Corpus c, int n, int m, int s, Dictionary d){
         /*Configuration initiale: Selection de sens alÃ©atoires*/
-        ArrayList<Text> listeTexte = c.getTexts();
-       // ArrayList<ProblemConfiguration> listConfiguration = new ArrayList<ProblemConfiguration>();
+       // ArrayList<Text> listeTexte = c.getTexts();
+       
        // Word mot;
         //double[] listeScore = new double[listeTexte.size()];
-        Random rand = new Random();
+    //    Random rand = new Random();
    
         //+ arrayliste de configuration
         // Pour chaque test du corpus
-        for (int j= 0; j < listeTexte.size(); j++){
+    //    for (int j= 0; j < listeTexte.size(); j++){
             
            // ProblemConfiguration configuration = new ProblemConfiguration(listeTexte.get(j).getLength(), true, listeTexte.get(j));
             /*
@@ -305,14 +306,85 @@ public class Main {
              * 	  pour tous les / ou les m mots? 	  
              * 		
              * 	
-             * */
+             * */       
             
-            
-            
-        }
+      //  }
 	}
-
-
-	
-	
+	public  static void stochastique_estim_distr(Corpus c, int n, int m, int s, Dictionary d, int numText){
+		ArrayList<ProblemConfiguration> listConfiguration = new ArrayList<ProblemConfiguration>();
+		ProblemConfiguration conf;
+		int i,j;
+		Text t = c.getTexts().get(numText);
+		//créer n configurations
+		for(i=0; i<n;++i){
+			conf = new ProblemConfiguration(t.getLength(), true, t);
+			conf.computeScore(t, d);
+			listConfiguration.add(conf);
+		}
+		//on initialise le tableau de probabilité
+		double[][] proba = new double[t.getLength()][];
+		for(i=0; i<t.getLength();++i){
+			proba[i] = new double[d.getSenses(t.getWord(i).getLabel()).size()];
+			for(j=0; j<proba[i].length; ++j) 
+				proba[i][j]=0;
+		}
+		Collections.sort(listConfiguration, Collections.reverseOrder());
+	//	for (i = 0 ; i < n ; i++)
+	//		System.out.println("Score: " + listConfiguration.get(i).getScore());
+		// on prend celui avec le meilleur score
+		conf = listConfiguration.get(0);
+		System.out.println("score 0 : "+conf.getScore());
+		int stab = s; int co=1;
+		double aleat;
+		while(stab > 0){
+			//tab = calculProba(configurations, m, tab);
+			i = 0;
+			for(ProblemConfiguration configuration : listConfiguration){
+				if(i<m){
+					for(j=0;j<configuration.getLength();++j){
+						proba[j][configuration.getSelectedSenseAt(j)]++;
+					}
+				}
+				i++;
+			}
+			
+			for(i=0; i<proba.length; ++i){
+				for(j=0;j<proba[i].length;++j){
+					if(j==0) 
+						proba[i][j] = proba[i][j]/m;
+					else 
+						proba[i][j] = (proba[i][j-1] + proba[i][j]/m);
+					
+				}
+			}
+			
+			for(ProblemConfiguration configuration : listConfiguration){
+				for(i=0;i<proba.length; ++i){
+					aleat = Math.random(); // on tire un nombre aléatoire entre 0 et 1
+					j=0;
+					// On cherche le sens du mot selon le nombre aléatoire
+					while(aleat>proba[i][j]){
+						++j;
+					}
+					configuration.setSelectedSenseAt(i, j);
+				}
+				// On recalcule le score de la configuration
+				configuration.computeScore(t, d);
+			}
+			
+			// On trie les configuration pour garder la meilleure
+			Collections.sort(listConfiguration,Collections.reverseOrder());
+			
+			// si le score ne change plus on enlève un du cycle stabilistation
+			if(listConfiguration.get(0).compareTo(conf)==0) 
+				stab--;
+			else // le score change on remet la cycle de stabilisation à sa valeur de départ 
+				stab=s;
+			// deep copy 
+			conf = listConfiguration.get(0).getClone();
+			System.out.println("score "+co+": "+conf.getScore());
+			co++;
+		}
+		System.out.println("Score retenue : "+conf.getScore());
+	}
 }
